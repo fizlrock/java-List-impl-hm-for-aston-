@@ -4,7 +4,8 @@
 
 package org.example;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class App {
   public String getGreeting() {
@@ -12,13 +13,37 @@ public class App {
   }
 
   public static void main(String[] args) {
-    System.out.println(new App().getGreeting());
-    List<Integer> a = new MyList<>(4);
-    System.out.println(a);
 
-    for (int i = 0; i < 20; i++) {
-      a.add(i/2, i);
-      System.out.println(a);
+    IntWrapper[] ints = new IntWrapper[5];
+    ints[0] = new IntWrapper(4);
+    ints[1] = new IntWrapper(9);
+    ints[2] = new IntWrapper(4);
+    ints[3] = new IntWrapper(3);
+    ints[4] = new IntWrapper(2);
+
+    System.out.println(Arrays.toString(ints));
+    MyMergeSorter.sort(ints);
+    System.out.println(Arrays.toString(ints));
+
+  }
+
+  static class IntWrapper implements Comparable<IntWrapper> {
+
+    public final int value;
+
+    public IntWrapper(int value) {
+      this.value = value;
     }
+
+    @Override
+    public int compareTo(IntWrapper o) {
+      return value - o.value;
+    }
+
+    @Override
+    public String toString() {
+      return Integer.toString(value);
+    }
+
   }
 }
