@@ -22,72 +22,74 @@ databaseChangeLog:
                     nullable: false
                     unique: true
   - changeSet:
-     id: '2'
-     author: 'fizlrock' 
-     comment: 'Add password column'
-     changes:
-      - addColumn:
-          tableName: app_user
-          columns:
-            - column:
-                name: password_hash
-                type: clob
-      - delete:
-          tableName: app_user
-          where: password_hash is null
-
-      - addNotNullConstraint:
-          tableName: app_user
-          columnName: password_hash
-
-  - changeSet:
-      id: '3'
+      id: '2'
       author: 'fizlrock'
-      comment: 'create table for audio records info'
+      comment: 'create device table'
       changes:
         - createTable:
-            tableName: audio_record_info
+            tableName: device
             columns:
               - column:
-                  name: audio_info_id
-                  type: uuid
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  startWith: 1
                   constraints:
                     nullable: false
                     primaryKey: true
               - column:
-                  name: user_id
+                  name: owner_id
                   type: bigint
-                  remarks: 'ID пользователя создавшего запись'
                   constraints:
-                    nullable: false
+                    nullable: false 
                     referencedTableName: app_user
                     referencedColumnNames: id
-                    foreignKeyName: audio_record_info_user_fk
+                    foreignKeyName: device_app_user_fk
                     deleteCascade: true
 
+  - changeSet:
+      id: '3'
+      author: 'fizlrock'
+      comment: 'add device name column in device table'
+      changes:
+        - addColumn:
+            tableName: device
+            columns:
               - column:
-                  name: durability
-                  type: bigint
-                  defaultValueNumeric: 0
-                  remarks: 'Record durability in seconds'
-
-              - column:
-                  name: record_date
-                  type: datetime
-                  remarks: 'the date and time when the recording was made'
-              - column:
-                  name: upload_date
-                  type: datetime
-                  remarks: 'the date and time when the recording was uploaded'
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: true
+        - addUniqueConstraint:
+            tableName: device
+            columnNames: owner_id, name
+            constraintName: owner_device_name_uniqu
 
   - changeSet:
       id: '4'
       author: 'fizlrock'
-      comment: 'add status column'
+      comment: 'create report table'
       changes:
-        - addColumn:
-            tableName: audio_record_info
+        - createTable:
+            tableName: report
+            remarks: Таблица для хранения отчетов устройств
             columns:
               - column:
-                  name: status
+                  name: device_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    referencedTableName: device
+                    referencedColumnNames:  id
+                    foreignKeyName: report_device_fk
+                    deleteCascade: true
+              - column:
+                  name: report_date
+                  type: datetime
+              - column:
+                  name: ip
                   type: varchar(100)
+              - column:
+                  name: comment
+                  type: varchar(200)

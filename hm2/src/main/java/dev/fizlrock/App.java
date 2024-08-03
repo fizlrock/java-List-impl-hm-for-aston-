@@ -1,9 +1,9 @@
 package dev.fizlrock;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
+
+import dev.fizlrock.dao.UserRepositoryImpl;
+import dev.fizlrock.domain.User;
 
 /**
  * App
@@ -11,17 +11,14 @@ import java.sql.Statement;
 public class App {
 
   public static void main(String[] args) throws SQLException {
-    Connection con;
-
-    con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/earsdb", "admin", "gracesecret");
-    Statement st = con.createStatement();
-    var result = st.executeQuery("select id, username from app_user;");
-
-    while (result.next()) {
-      System.out.printf("%d %s \n", result.getLong("id"), result.getString("username"));
-
-    }
-
+    var rep = new UserRepositoryImpl();
+    // System.out.println("hey hey");
+    // for (int i = 0; i < 10; i++) {
+    // var id = rep.save(new User(String.format("test it 4 %d", i))).getId();
+    // System.out.printf("saved %d entity with id %d\n", i, id);
+    // }
+    var array = rep.findAll();
+    System.out.println(array);
   }
 
 }
