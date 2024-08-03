@@ -11,7 +11,11 @@ import dev.fizlrock.domain.User;
  */
 public class UserRepository implements CrudRepository<User, Long> {
 
-  JDBCWrapper wrapper = new JDBCWrapper();
+  JDBCWrapper wrapper;
+
+  public UserRepository(JDBCWrapper wrapper) {
+    this.wrapper = wrapper;
+  }
 
   @Override
   public List<User> findAll() {

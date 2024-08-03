@@ -16,7 +16,11 @@ import java.util.List;
 
 public class JDBCWrapper {
 
-  private Connection con = ConnectionHolder.getConnection();
+  public JDBCWrapper(Connection con) {
+    this.con = con;
+  }
+
+  private Connection con;
 
   private static void setArgsToStatement(PreparedStatement stmnt, Object... params) {
     try {
