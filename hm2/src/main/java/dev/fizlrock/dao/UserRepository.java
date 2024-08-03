@@ -9,7 +9,7 @@ import dev.fizlrock.domain.User;
 /**
  * UserRepository
  */
-public class UserRepositoryImpl implements CrudRepository<User, Long> {
+public class UserRepository implements CrudRepository<User, Long> {
 
   JDBCWrapper wrapper = new JDBCWrapper();
 
