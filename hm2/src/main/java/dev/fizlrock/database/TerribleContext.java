@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import dev.fizlrock.dao.UserRepository;
+
 /**
  * ConnectionHolder
  */
@@ -27,6 +29,7 @@ public class TerribleContext {
     }
 
     createBean(JDBCWrapper.class);
+    createBean(UserRepository.class);
 
     System.out.println(container);
 

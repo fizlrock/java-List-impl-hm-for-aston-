@@ -30,6 +30,12 @@ dependencies {
     liquibaseRuntime 'info.picocli:picocli:4.7.5'
     liquibaseRuntime 'org.yaml:snakeyaml:1.33'
 
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:11.0.0-M22'
+
+    
+    // https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -60,3 +66,6 @@ liquibase {
 			}
   }
 }
+
+
+

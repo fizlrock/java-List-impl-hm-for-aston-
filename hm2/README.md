@@ -36,6 +36,7 @@ Device has many PingReports
 
 - [x] UserRepositoryImpl
 - [x] Выбор стратегии и инструментов тестирование data access layer (никак не тестировать)
+- [ ] UserService
 
 - [ ] Написание DAOs
 - [ ] Тестирование DAOs
