@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import org.apache.catalina.Context;
 import org.apache.catalina.startup.Tomcat;
 
+import dev.fizlrock.myspring.TerribleContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,25 +19,28 @@ import jakarta.servlet.http.HttpServletResponse;
 public class App {
 
   public static void main(String[] args) throws Exception {
+    var context =new TerribleContext();
+    var finded = context.getBeans(HttpServlet.class);
+    System.out.println(finded);
 
 
-    // Нужно добавить зависимость tomcat-embed-core
+    // // Нужно добавить зависимость tomcat-embed-core
 
-    Tomcat tomcat = new Tomcat();
-    tomcat.setBaseDir("build/tomcat_trashcan");
-    tomcat.setPort(8080);
-    tomcat.getConnector(); // Без не работает, почему-то...
+    // Tomcat tomcat = new Tomcat();
+    // tomcat.setBaseDir("build/tomcat_trashcan");
+    // tomcat.setPort(8080);
+    // tomcat.getConnector(); // Без не работает, почему-то...
 
-    String contextPath = "/";
-    String docBase = new File(".").getAbsolutePath();
-    Context context = tomcat.addContext(contextPath, docBase);
+    // String contextPath = "/";
+    // String docBase = new File(".").getAbsolutePath();
+    // Context context = tomcat.addContext(contextPath, docBase);
 
 
-    tomcat.addServlet(contextPath, MyServlet.class.getName(), new MyServlet());
-    context.addServletMappingDecoded("myservlet", MyServlet.class.getName());
+    // tomcat.addServlet(contextPath, MyServlet.class.getName(), new MyServlet());
+    // context.addServletMappingDecoded("/myservlet", MyServlet.class.getName());
 
-    tomcat.start();
-    tomcat.getServer().await();
+    // tomcat.start();
+    // tomcat.getServer().await();
   }
 
 

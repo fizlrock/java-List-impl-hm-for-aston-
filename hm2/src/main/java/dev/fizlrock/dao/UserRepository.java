@@ -3,7 +3,6 @@ package dev.fizlrock.dao;
 import java.util.List;
 import java.util.Optional;
 
-import dev.fizlrock.database.JDBCWrapper;
 import dev.fizlrock.domain.User;
 
 /**

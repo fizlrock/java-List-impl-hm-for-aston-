@@ -8,12 +8,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+@RoutePath(path = "/users")
 public class UserController extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-    resp.setContentType("text/html");
+    resp.setContentType("applicaton/json");
     PrintWriter printWriter = resp.getWriter();
     printWriter.write("Hello!");
     printWriter.close();

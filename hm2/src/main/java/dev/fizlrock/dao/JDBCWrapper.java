@@ -1,4 +1,4 @@
-package dev.fizlrock.database;
+package dev.fizlrock.dao;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
