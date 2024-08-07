@@ -33,7 +33,7 @@ public class DeviceController extends HttpServlet {
 
     String userIdstr = req.getPathInfo();
     if (userIdstr == null) {
-      var users = userService.findAll();
+      var users = userService.findAllUsers();
       System.out.println(req.getPathInfo());
       mapper.writeValue(out, users);
     } else {
@@ -83,7 +83,7 @@ public class DeviceController extends HttpServlet {
 
     Long id = Long.parseLong(userIdStr);
     User user = mapper.readValue(in, User.class);
-    userService.updateByID(id, user);
+    userService.updateUserByID(id, user);
     resp.setStatus(HttpServletResponse.SC_ACCEPTED);
 
     in.close();
@@ -104,7 +104,7 @@ public class DeviceController extends HttpServlet {
       userIdStr = userIdStr.substring(1);
 
     Long id = Long.parseLong(userIdStr);
-    var deleted = userService.deleteByID(id);
+    var deleted = userService.deleteUserByID(id);
 
     if (deleted)
       resp.setStatus(HttpServletResponse.SC_OK);

@@ -1,5 +1,6 @@
 package dev.fizlrock;
 
+import dev.fizlrock.dao.interfaces.CrudRepository;
 import dev.fizlrock.myspring.TerribleContext;
 
 /**
@@ -8,7 +9,9 @@ import dev.fizlrock.myspring.TerribleContext;
 public class App {
 
   public static void main(String[] args) throws Exception {
-    new TerribleContext();
+    var context = new TerribleContext();
+    var beans = context.getBeans(CrudRepository.class);
+    beans.forEach(x -> System.out.println(x.getClass()));
   }
 
 }

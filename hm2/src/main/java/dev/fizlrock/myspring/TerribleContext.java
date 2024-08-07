@@ -14,6 +14,7 @@ import dev.fizlrock.configurations.ObjectMapperConfiguration;
 import dev.fizlrock.configurations.TomcatConfiguration;
 import dev.fizlrock.controllers.ServletController;
 import dev.fizlrock.controllers.UserController;
+import dev.fizlrock.dao.impl.DeviceRepositoryJDBC;
 import dev.fizlrock.dao.impl.JDBCWrapper;
 import dev.fizlrock.dao.impl.UserRepositoryJDBC;
 import dev.fizlrock.services.UserDeviceService;
@@ -35,6 +36,7 @@ public class TerribleContext {
     createBean(ConnectionConfiguration::getConnection);
     createBean(JDBCWrapper.class);
     createBean(UserRepositoryJDBC.class);
+    createBean(DeviceRepositoryJDBC.class);
     createBean(UserDeviceService.class);
     createBean(TomcatConfiguration::getTomcat);
     createBean(UserController.class);
