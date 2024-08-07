@@ -8,11 +8,11 @@ import dev.fizlrock.domain.User;
 /**
  * UserRepository
  */
-public class UserRepository implements CrudRepository<User, Long> {
+public class UserRepositoryJDBC implements CrudRepository<User, Long> {
 
   JDBCWrapper wrapper;
 
-  public UserRepository(JDBCWrapper wrapper) {
+  public UserRepositoryJDBC(JDBCWrapper wrapper) {
     this.wrapper = wrapper;
   }
 

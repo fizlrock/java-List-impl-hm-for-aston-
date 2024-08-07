@@ -37,13 +37,8 @@ Device has many PingReports
 - [x] UserRepositoryImpl
 - [x] Выбор стратегии и инструментов тестирование data access layer (никак не тестировать)
 - [x] Свой IoC контейнер
-- [ ] UserService
-
-- [ ] Написание DAOs
-- [ ] Тестирование DAOs
-- [ ] Написать OpenAPI спецификацию 
-- [ ] написание Service Layer
-- [ ] написание Controller Layer
+- [x] UserService
+- [x] UserController (CRUD)
 
 
 ## Проектирование базы данных

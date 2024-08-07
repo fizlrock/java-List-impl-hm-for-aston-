@@ -11,13 +11,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@RoutePath(path = "/users/*")
-public class UserController extends HttpServlet {
+@RoutePath(path = "/device/*")
+public class DeviceController extends HttpServlet {
 
   private UserDeviceService userService;
   private ObjectMapper mapper;
 
-  public UserController(UserDeviceService userService, ObjectMapper mapper) {
+  public DeviceController(UserDeviceService userService, ObjectMapper mapper) {
     this.userService = userService;
     this.mapper = mapper;
   }

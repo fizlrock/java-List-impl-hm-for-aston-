@@ -2,7 +2,7 @@ package org.example;
 
 import org.junit.jupiter.api.Test;
 
-import dev.fizlrock.dao.UserRepository;
+import dev.fizlrock.dao.UserRepositoryJDBC;
 
 /**
  * UserRepostitoryIntegrationTests
@@ -10,7 +10,7 @@ import dev.fizlrock.dao.UserRepository;
 public class UserRepostitoryIntegrationTests {
 
 
-  UserRepository  userRepo = new UserRepository();
+  UserRepositoryJDBC  userRepo = new UserRepositoryJDBC();
 
   @Test
   void createAndFindUserTest() {

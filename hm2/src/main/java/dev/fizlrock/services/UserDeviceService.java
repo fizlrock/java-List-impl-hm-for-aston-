@@ -3,17 +3,17 @@ package dev.fizlrock.services;
 import java.util.List;
 import java.util.Optional;
 
-import dev.fizlrock.dao.UserRepository;
+import dev.fizlrock.dao.UserRepositoryJDBC;
 import dev.fizlrock.domain.User;
 
 /**
  * UserService
  */
-public class UserService {
+public class UserDeviceService {
 
-  private UserRepository userRepo;
+  private UserRepositoryJDBC userRepo;
 
-  public UserService(UserRepository userRepo) {
+  public UserDeviceService(UserRepositoryJDBC userRepo) {
     this.userRepo = userRepo;
   }
 

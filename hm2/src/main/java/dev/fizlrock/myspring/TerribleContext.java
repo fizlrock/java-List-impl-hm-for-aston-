@@ -15,8 +15,8 @@ import dev.fizlrock.configurations.TomcatConfiguration;
 import dev.fizlrock.controllers.ServletController;
 import dev.fizlrock.controllers.UserController;
 import dev.fizlrock.dao.JDBCWrapper;
-import dev.fizlrock.dao.UserRepository;
-import dev.fizlrock.services.UserService;
+import dev.fizlrock.dao.UserRepositoryJDBC;
+import dev.fizlrock.services.UserDeviceService;
 
 /**
  * ConnectionHolder
@@ -34,8 +34,8 @@ public class TerribleContext {
     createBean(ObjectMapperConfiguration::getObjectMapper);
     createBean(ConnectionConfiguration::getConnection);
     createBean(JDBCWrapper.class);
-    createBean(UserRepository.class);
-    createBean(UserService.class);
+    createBean(UserRepositoryJDBC.class);
+    createBean(UserDeviceService.class);
     createBean(TomcatConfiguration::getTomcat);
     createBean(UserController.class);
     createBean(ServletController.class);
