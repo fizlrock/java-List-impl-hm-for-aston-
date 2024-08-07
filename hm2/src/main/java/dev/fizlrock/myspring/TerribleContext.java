@@ -2,7 +2,6 @@ package dev.fizlrock.myspring;
 
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +10,13 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import dev.fizlrock.configurations.ConnectionConfiguration;
+import dev.fizlrock.configurations.ObjectMapperConfiguration;
 import dev.fizlrock.configurations.TomcatConfiguration;
 import dev.fizlrock.controllers.ServletController;
 import dev.fizlrock.controllers.UserController;
 import dev.fizlrock.dao.JDBCWrapper;
 import dev.fizlrock.dao.UserRepository;
+import dev.fizlrock.services.UserService;
 
 /**
  * ConnectionHolder
@@ -30,9 +31,11 @@ public class TerribleContext {
   private void init() {
 
     container.put(this.getClass(), this);
+    createBean(ObjectMapperConfiguration::getObjectMapper);
     createBean(ConnectionConfiguration::getConnection);
     createBean(JDBCWrapper.class);
     createBean(UserRepository.class);
+    createBean(UserService.class);
     createBean(TomcatConfiguration::getTomcat);
     createBean(UserController.class);
     createBean(ServletController.class);
@@ -68,7 +71,7 @@ public class TerribleContext {
 
           var bean = getBean(neededArg.getType());
           if (bean == null)
-            throw new IllegalStateException(String.format("Bean %s not found in context", neededArg.getName()));
+            throw new IllegalStateException(String.format("Bean %s not found in context", neededArg.getType()));
           args.add(bean);
         }
 
@@ -81,7 +84,6 @@ public class TerribleContext {
     }
 
   }
-
 
   @SuppressWarnings("unchecked")
   public <T> T getBean(Class<T> beanClass) {

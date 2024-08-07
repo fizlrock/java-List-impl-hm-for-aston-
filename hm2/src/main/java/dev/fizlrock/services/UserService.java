@@ -1,4 +1,7 @@
-package dev.fizlrock.Services;
+package dev.fizlrock.services;
+
+import java.util.List;
+import java.util.Optional;
 
 import dev.fizlrock.dao.UserRepository;
 import dev.fizlrock.domain.User;
@@ -14,9 +17,27 @@ public class UserService {
     this.userRepo = userRepo;
   }
 
-  public User findUserById(Long id) {
+  public Optional<User> findUserById(Long id) {
     var user = userRepo.findById(id);
-    return user.get();
+    return user;
+  }
+
+  public List<User> findAll() {
+    return userRepo.findAll();
+  }
+
+  public User createNewUser(User user) {
+    return userRepo.save(user);
+
+  }
+
+  public boolean updateByID(Long id, User user) {
+    return userRepo.updateById(id, user);
+  }
+
+  public boolean deleteByID(Long id) {
+    return userRepo.deleteById(id);
+
   }
 
 }
