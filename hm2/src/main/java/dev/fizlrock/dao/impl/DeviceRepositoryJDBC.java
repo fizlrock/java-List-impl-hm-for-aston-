@@ -3,13 +3,13 @@ package dev.fizlrock.dao.impl;
 import java.util.List;
 import java.util.Optional;
 
-import dev.fizlrock.dao.interfaces.CrudRepository;
+import dev.fizlrock.dao.interfaces.DeviceRepository;
 import dev.fizlrock.domain.Device;
 
 /**
  * DeviceRepositoryJDBC
  */
-public class DeviceRepositoryJDBC implements CrudRepository<Device, Long> {
+public class DeviceRepositoryJDBC extends DeviceRepository {
 
   private JDBCWrapper wrapper;
 
@@ -40,7 +40,6 @@ public class DeviceRepositoryJDBC implements CrudRepository<Device, Long> {
 
   @Override
   public boolean updateById(Long id, Device entity) {
-
     return wrapper.executeSQL("update device where id = ? set name = ?, owner_id = ? ",
         id, entity.getName(), entity.getOwnerId()) > 0;
   }
