@@ -1,4 +1,4 @@
-package dev.fizlrock.dao;
+package dev.fizlrock.dao.interfaces;
 
 import java.util.List;
 import java.util.Optional;

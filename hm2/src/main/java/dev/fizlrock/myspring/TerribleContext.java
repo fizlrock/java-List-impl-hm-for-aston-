@@ -14,8 +14,8 @@ import dev.fizlrock.configurations.ObjectMapperConfiguration;
 import dev.fizlrock.configurations.TomcatConfiguration;
 import dev.fizlrock.controllers.ServletController;
 import dev.fizlrock.controllers.UserController;
-import dev.fizlrock.dao.JDBCWrapper;
-import dev.fizlrock.dao.UserRepositoryJDBC;
+import dev.fizlrock.dao.impl.JDBCWrapper;
+import dev.fizlrock.dao.impl.UserRepositoryJDBC;
 import dev.fizlrock.services.UserDeviceService;
 
 /**

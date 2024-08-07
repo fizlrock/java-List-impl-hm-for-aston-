@@ -1,8 +1,9 @@
-package dev.fizlrock.dao;
+package dev.fizlrock.dao.impl;
 
 import java.util.List;
 import java.util.Optional;
 
+import dev.fizlrock.dao.interfaces.CrudRepository;
 import dev.fizlrock.domain.Device;
 
 /**

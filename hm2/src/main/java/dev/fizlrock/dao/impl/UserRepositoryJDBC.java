@@ -1,14 +1,15 @@
-package dev.fizlrock.dao;
+package dev.fizlrock.dao.impl;
 
 import java.util.List;
 import java.util.Optional;
 
+import dev.fizlrock.dao.interfaces.UserRepository;
 import dev.fizlrock.domain.User;
 
 /**
  * UserRepository
  */
-public class UserRepositoryJDBC implements CrudRepository<User, Long> {
+public class UserRepositoryJDBC extends UserRepository {
 
   JDBCWrapper wrapper;
 

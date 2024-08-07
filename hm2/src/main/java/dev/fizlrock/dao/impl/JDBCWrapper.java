@@ -1,4 +1,4 @@
-package dev.fizlrock.dao;
+package dev.fizlrock.dao.impl;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -101,7 +101,6 @@ public class JDBCWrapper {
     T instance = createInstance(clazz);
 
     Field[] fields = clazz.getDeclaredFields();
-    System.out.println(fields.length);
 
     try {
       for (var f : fields) {
