@@ -47,9 +47,14 @@ java {
     }
 }
 
+compileJava {
+    options.compilerArgs << '-parameters'
+}
+
 application {
     // Define the main class for the application.
     mainClass = 'dev.fizlrock.App'
+
 }
 
 tasks.named('test') {

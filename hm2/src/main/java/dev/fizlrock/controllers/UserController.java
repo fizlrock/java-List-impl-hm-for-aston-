@@ -5,13 +5,16 @@ import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.fizlrock.domain.User;
+import dev.fizlrock.myspring.web.ResponseEntity;
+import dev.fizlrock.myspring.web.annotations.Endpoint;
+import dev.fizlrock.myspring.web.annotations.JsonAPIController;
 import dev.fizlrock.services.UserDeviceService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@RoutePath(path = "/users/*")
+@JsonAPIController
 public class UserController extends HttpServlet {
 
   private UserDeviceService userService;
@@ -20,6 +23,14 @@ public class UserController extends HttpServlet {
   public UserController(UserDeviceService userService, ObjectMapper mapper) {
     this.userService = userService;
     this.mapper = mapper;
+  }
+
+  @Endpoint(pathTemplate = "/users/hello/{userName}/{someNumber}")
+  public ResponseEntity helloWorld(String remoteIp, String userName, Long someNumber) {
+
+    var message = String.format("Hello %s, you ip %s, increased number: %d", userName, remoteIp, someNumber + 1);
+
+    return new ResponseEntity(200, message);
   }
 
   /**

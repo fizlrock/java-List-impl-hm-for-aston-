@@ -1,5 +1,6 @@
 package dev.fizlrock.myspring;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,11 +13,12 @@ import java.util.stream.Collectors;
 import dev.fizlrock.configurations.ConnectionConfiguration;
 import dev.fizlrock.configurations.ObjectMapperConfiguration;
 import dev.fizlrock.configurations.TomcatConfiguration;
-import dev.fizlrock.controllers.ServletController;
+import dev.fizlrock.controllers.DeviceController;
 import dev.fizlrock.controllers.UserController;
 import dev.fizlrock.dao.impl.DeviceRepositoryJDBC;
 import dev.fizlrock.dao.impl.JDBCWrapper;
 import dev.fizlrock.dao.impl.UserRepositoryJDBC;
+import dev.fizlrock.myspring.web.FrontController;
 import dev.fizlrock.services.UserDeviceService;
 
 /**
@@ -40,7 +42,8 @@ public class TerribleContext {
     createBean(UserDeviceService.class);
     createBean(TomcatConfiguration::getTomcat);
     createBean(UserController.class);
-    createBean(ServletController.class);
+    createBean(DeviceController.class);
+    createBean(FrontController.class);
 
     var report = container.entrySet().stream()
         .map(Entry::getKey)
@@ -104,6 +107,14 @@ public class TerribleContext {
     return container.entrySet().stream().filter(
         x -> beanClass.isAssignableFrom(x.getKey()))
         .map(x -> (T) x.getValue())
+        .collect(Collectors.toList());
+  }
+
+  public List<Object> getBeansWithAnnotations(Class<? extends Annotation> annotation) {
+
+    return container.entrySet().stream()
+        .map(Entry::getValue)
+        .filter(x -> x.getClass().isAnnotationPresent(annotation))
         .collect(Collectors.toList());
   }
 

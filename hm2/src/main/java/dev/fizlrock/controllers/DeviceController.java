@@ -5,13 +5,14 @@ import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.fizlrock.domain.User;
+import dev.fizlrock.myspring.web.annotations.JsonAPIController;
 import dev.fizlrock.services.UserDeviceService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@RoutePath(path = "/device/*")
+@JsonAPIController
 public class DeviceController extends HttpServlet {
 
   private UserDeviceService userService;
