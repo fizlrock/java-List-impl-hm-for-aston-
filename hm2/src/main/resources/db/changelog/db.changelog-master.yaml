@@ -1,0 +1,95 @@
+databaseChangeLog:
+  - changeSet:
+      id: '1'
+      author: 'fizlrock' 
+      comment: 'create users table'
+      changes:
+        - createTable:
+            tableName: app_user
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  startWith: 1
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: username
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+  - changeSet:
+      id: '2'
+      author: 'fizlrock'
+      comment: 'create device table'
+      changes:
+        - createTable:
+            tableName: device
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  startWith: 1
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: owner_id
+                  type: bigint
+                  constraints:
+                    nullable: false 
+                    referencedTableName: app_user
+                    referencedColumnNames: id
+                    foreignKeyName: device_app_user_fk
+                    deleteCascade: true
+
+  - changeSet:
+      id: '3'
+      author: 'fizlrock'
+      comment: 'add device name column in device table'
+      changes:
+        - addColumn:
+            tableName: device
+            columns:
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: true
+        - addUniqueConstraint:
+            tableName: device
+            columnNames: owner_id, name
+            constraintName: owner_device_name_uniqu
+
+  - changeSet:
+      id: '4'
+      author: 'fizlrock'
+      comment: 'create report table'
+      changes:
+        - createTable:
+            tableName: report
+            remarks: Таблица для хранения отчетов устройств
+            columns:
+              - column:
+                  name: device_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    referencedTableName: device
+                    referencedColumnNames:  id
+                    foreignKeyName: report_device_fk
+                    deleteCascade: true
+              - column:
+                  name: report_date
+                  type: datetime
+              - column:
+                  name: ip
+                  type: varchar(100)
+              - column:
+                  name: comment
+                  type: varchar(200)

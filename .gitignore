@@ -2,10 +2,10 @@
 .gradle
 
 # Ignore Gradle build output directory
-build
-app/bin
-app/.project
-app/.classpath
-app/.settings
-app/.
+**/build
+**/bin
+**/.project
+**/.classpath
+**/.settings
+**/.
 .settings
