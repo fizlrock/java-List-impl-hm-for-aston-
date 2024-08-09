@@ -38,8 +38,12 @@ public class UserRepositoryJDBC extends UserRepository {
   }
 
   @Override
-  public boolean updateById(Long id, User entity) {
-    return wrapper.executeSQL("update app_user where id = ? set username = ?", id, entity.getUsername()) > 0;
+  public User updateById(Long id, User entity) {
+    var updated = wrapper.executeSQL("update app_user where id = ? set username = ?", id, entity.getUsername()) > 0;
+    if (updated)
+      return wrapper.executeSelectRequest(User.class, "select * from app_user where id = ?", id).get(0);
+    else
+      return null;
   }
 
   @Override

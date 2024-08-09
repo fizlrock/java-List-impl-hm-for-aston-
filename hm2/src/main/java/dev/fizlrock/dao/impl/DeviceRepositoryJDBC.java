@@ -39,9 +39,14 @@ public class DeviceRepositoryJDBC extends DeviceRepository {
   }
 
   @Override
-  public boolean updateById(Long id, Device entity) {
-    return wrapper.executeSQL("update device where id = ? set name = ?, owner_id = ? ",
+  public Device updateById(Long id, Device entity) {
+    var isUpdated = wrapper.executeSQL("update device where id = ? set name = ?, owner_id = ? ",
         id, entity.getName(), entity.getOwnerId()) > 0;
+
+    if (!isUpdated)
+      return null;
+    return wrapper.executeSelectRequest(Device.class, "select * from device where id = ?", id).get(0);
+
   }
 
   @Override

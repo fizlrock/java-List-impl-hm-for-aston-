@@ -1,129 +1,57 @@
 package dev.fizlrock.controllers;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import dev.fizlrock.domain.User;
 import dev.fizlrock.myspring.web.ResponseEntity;
 import dev.fizlrock.myspring.web.annotations.Endpoint;
 import dev.fizlrock.myspring.web.annotations.JsonAPIController;
 import dev.fizlrock.services.UserDeviceService;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @JsonAPIController
-public class UserController extends HttpServlet {
+public class UserController {
 
   private UserDeviceService userService;
-  private ObjectMapper mapper;
 
-  public UserController(UserDeviceService userService, ObjectMapper mapper) {
+  public UserController(UserDeviceService userService) {
     this.userService = userService;
-    this.mapper = mapper;
   }
 
-  @Endpoint(pathTemplate = "/users/hello/{userName}/{someNumber}")
-  public ResponseEntity helloWorld(String remoteIp, String userName, Long someNumber) {
-
-    var message = String.format("Hello %s, you ip %s, increased number: %d", userName, remoteIp, someNumber + 1);
-
-    return new ResponseEntity(200, message);
+  @Endpoint(pathTemplate = "/user", method = "GET")
+  public ResponseEntity getAllUsers() {
+    return new ResponseEntity(200, userService.findAllUsers());
   }
 
-  /**
-   * Получить всех пользователей
-   */
-  @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    resp.setContentType("applicaton/json");
-    var out = resp.getWriter();
-
-    String userIdstr = req.getPathInfo();
-    if (userIdstr == null) {
-      var users = userService.findAllUsers();
-      System.out.println(req.getPathInfo());
-      mapper.writeValue(out, users);
-    } else {
-      Long userID = Long.parseLong(userIdstr.substring(1));
-
-      var user = userService.findUserById(userID);
-      if (user.isPresent()) {
-        mapper.writeValue(out, user.get());
-        resp.setStatus(HttpServletResponse.SC_OK);
-      } else {
-        resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-      }
-    }
-
-    out.close();
+  @Endpoint(pathTemplate = "/user/{userId}", method = "GET")
+  public ResponseEntity getUserByID(Long userId) {
+    var user = userService.findUserById(userId);
+    if (user.isEmpty())
+      return new ResponseEntity(404, null);
+    return new ResponseEntity(200, user.get());
   }
 
-  @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    resp.setContentType("applicaton/json");
-    var in = req.getReader();
-    var out = resp.getWriter();
-
-    var user = mapper.readValue(in, User.class);
-    user = userService.createNewUser(user);
-    mapper.writeValue(out, user);
-
-    resp.setStatus(HttpServletResponse.SC_CREATED);
-
-    in.close();
-    out.close();
+  @Endpoint(pathTemplate = "/user/{userId}", method = "DELETE")
+  public ResponseEntity deleteUserByID(Long userId) {
+    var isDeleted = userService.deleteUserByID(userId);
+    if (isDeleted)
+      return new ResponseEntity(204, null);
+    return new ResponseEntity(200, null);
   }
 
-  @Override
-  protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    resp.setContentType("applicaton/json");
-    var in = req.getReader();
-    var out = resp.getWriter();
-    var userIdStr = req.getPathInfo();
-
-    if (userIdStr == null)
-      throw new IllegalArgumentException("you must specify userId as path variable");
+  @Endpoint(pathTemplate = "/user/{userId}", method = "PUT")
+  public ResponseEntity updateUser(User user, Long userId) {
+    var updatedEntity = userService.updateUserByID(userId, user);
+    if (updatedEntity == null) {
+      user = userService.createNewUser(user);
+      return new ResponseEntity(201, user);
+    } else if (updatedEntity.equals(user))
+      return new ResponseEntity(204, null);
     else
-      userIdStr = userIdStr.substring(1);
-
-    Long id = Long.parseLong(userIdStr);
-    User user = mapper.readValue(in, User.class);
-    userService.updateUserByID(id, user);
-    resp.setStatus(HttpServletResponse.SC_ACCEPTED);
-
-    in.close();
-    out.close();
+      return new ResponseEntity(200, user);
   }
 
-  @Override
-  protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    resp.setContentType("applicaton/json");
-    var in = req.getReader();
-    var out = resp.getWriter();
-    var userIdStr = req.getPathInfo();
-
-    if (userIdStr == null)
-      throw new IllegalArgumentException("you must specify userId as path variable");
-    else
-      userIdStr = userIdStr.substring(1);
-
-    Long id = Long.parseLong(userIdStr);
-    var deleted = userService.deleteUserByID(id);
-
-    if (deleted)
-      resp.setStatus(HttpServletResponse.SC_OK);
-    else
-      resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
-
-    in.close();
-    out.close();
-
+  @Endpoint(pathTemplate = "/user", method = "CREATE")
+  public ResponseEntity createUser(User user) {
+    var createdUser = userService.createNewUser(user);
+    return new ResponseEntity(201, createdUser);
   }
+
 }

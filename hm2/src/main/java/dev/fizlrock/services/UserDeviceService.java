@@ -22,8 +22,7 @@ public class UserDeviceService {
   }
 
   public Optional<User> findUserById(Long id) {
-    var user = userRepo.findById(id);
-    return user;
+    return userRepo.findById(id);
   }
 
   public List<User> findAllUsers() {

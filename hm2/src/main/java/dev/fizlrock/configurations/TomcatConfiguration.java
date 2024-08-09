@@ -1,9 +1,7 @@
 package dev.fizlrock.configurations;
 
-import java.io.File;
-
-import org.apache.catalina.Context;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.coyote.http2.Http2Protocol;
 
 /**
  * TomcatConfiguration
@@ -15,8 +13,8 @@ public class TomcatConfiguration {
     Tomcat tomcat = new Tomcat();
     tomcat.setBaseDir("build/tomcat_trashcan");
     tomcat.setPort(8080);
-    tomcat.getConnector(); // Без не работает, почему-то...
-
+    var connector = tomcat.getConnector();
+    connector.addUpgradeProtocol(new Http2Protocol());
 
     return tomcat;
   }

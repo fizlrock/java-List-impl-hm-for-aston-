@@ -9,5 +9,6 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Endpoint {
   String pathTemplate();
+  String method();
 
 }

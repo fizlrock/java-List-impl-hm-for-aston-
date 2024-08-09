@@ -15,7 +15,7 @@ public interface CrudRepository<A, B> {
 
   public boolean deleteById(B id);
 
-  public boolean updateById(B id, A entity);
+  public A updateById(B id, A entity);
 
   public A save(A entity);
 }

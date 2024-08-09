@@ -2,6 +2,7 @@ package dev.fizlrock.myspring.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import org.apache.catalina.Context;
@@ -34,7 +36,7 @@ public class FrontController extends HttpServlet {
   private Tomcat tomcat;
   private Context context;
 
-  private static record ControllerHandler(String pattern, Object instance, Method method) {
+  private static record ControllerHandler(String pattern, String httpMethod, Object instance, Method method) {
   }
 
   private List<ControllerHandler> handlers = new ArrayList<>();
@@ -83,8 +85,8 @@ public class FrontController extends HttpServlet {
         if (endA.length > 1)
           throw new IllegalStateException("Too much Endpont annotations. Allowed only one");
 
-        var template = ((Endpoint) endA[0]).pathTemplate();
-        handlers.add(new ControllerHandler(template, controller, m));
+        var annotation = ((Endpoint) endA[0]);
+        handlers.add(new ControllerHandler(annotation.pathTemplate(), annotation.method(), controller, m));
       }
     }
   }
@@ -135,17 +137,12 @@ public class FrontController extends HttpServlet {
     params.put("pathInfo", req.getPathInfo());
     params.put("remoteIp", req.getRemoteAddr());
 
-
     var relevant_handler = handlers.stream()
+        .filter(h -> h.httpMethod.equals(req.getMethod()))
         .map(h -> new Pair<>(h,
             matchPathAndExtractVariable(h.pattern(), req.getPathInfo())))
         .filter(x -> x.value() != null)
         .collect(Collectors.toList());
-
-    if (relevant_handler.size() > 1) {
-    } else if (relevant_handler.size() == 0) {
-
-    }
 
     switch (relevant_handler.size()) {
       case 0 -> sendNotFoundResponse(req, resp);
@@ -171,8 +168,16 @@ public class FrontController extends HttpServlet {
 
     for (Parameter p : neeededParams) {
       var p_value = params.get(p.getName());
-      if (p_value == null)
-        throw new RuntimeException("Запрос не содержит параметра " + p.getName());
+      if (p_value == null) {
+        try {
+          // TODO тут будут проблемы
+          var bodyParam = mapper.readValue(req.getInputStream(), p.getType());
+          args.add(bodyParam);
+          continue;
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      }
       args.add(castTo(p.getType(), p_value));
     }
 
@@ -181,18 +186,20 @@ public class FrontController extends HttpServlet {
     try {
       response = (ResponseEntity) controller.method().invoke(controller.instance, args.toArray());
     } catch (IllegalAccessException | InvocationTargetException e) {
-      e.printStackTrace();
+      throw new RuntimeException(e);
     }
 
     if (response != null) {
-      try (var out = resp.getOutputStream()) {
-        mapper.writeValue(out, response.response());
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
+      resp.setContentType("application/json");
       resp.setStatus(response.status_code());
-    }
 
+      if (response.response() != null)
+        try (var out = resp.getOutputStream()) {
+          mapper.writeValue(out, response.response());
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+    }
   }
 
   private static void sendNotFoundResponse(HttpServletRequest req, HttpServletResponse resp) {
